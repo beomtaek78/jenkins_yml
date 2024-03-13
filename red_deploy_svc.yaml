@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-red
+spec:                 
+  replicas: 3         
+  selector:
+    matchLabels:
+      color: red
+  template:           
+    metadata:
+      name: mynginx-red   
+      labels:
+        color: red
+    spec:             
+      containers:
+      - name: mynginxctn-red  
+        image: brian24/kakaodev:red
+        resources:
+          limits:
+            memory: "32Mi"
+            cpu: "200m"     
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-red
+spec:
+  selector:       
+    color: red
+  type: NodePort
+  ports:
+  - port: 8083            
+    targetPort: 80
+    nodePort: 30003  
+    protocol: TCP   
